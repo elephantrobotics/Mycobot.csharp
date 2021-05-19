@@ -1,5 +1,7 @@
 # This is a simple c# api about mycobot
 
+> dotnet version: 5.0.103
+
 You can download the `.dll` at [Release](https://github.com/elephantrobotics/Mycobot.csharp/releases)
 
 And import it to you Project.
