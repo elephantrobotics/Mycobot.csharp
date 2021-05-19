@@ -10,9 +10,9 @@ namespace Mycobot.csharp
         public string name = "mycobot";
         private static SerialPort _serialPort;
 
-        public MyCobot(string port)
+        public MyCobot(string port, int baud=115200)
         {
-            _serialPort = new SerialPort(port, 115200){DtrEnable = true, RtsEnable = true};
+            _serialPort = new SerialPort(port, baud){DtrEnable = true, RtsEnable = true};
         }
 
         public bool IsOpen => _serialPort != null && _serialPort.IsOpen;
