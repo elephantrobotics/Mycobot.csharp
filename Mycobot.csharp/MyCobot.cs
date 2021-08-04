@@ -279,7 +279,7 @@ namespace Mycobot.csharp
         /// <returns>int[], length: 6</returns>
         public int[] GetCoords()
         {
-            byte[] command = {0xfe, 0xfe, 0x02, 0x23, 0xfe};
+            byte[] command = {0xfe, 0xfe, 0x02, 0x23, 0xfa};
             Write(command, 0 ,command.Length);
             
             Thread.Sleep(200);
