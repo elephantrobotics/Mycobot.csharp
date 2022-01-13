@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Threading;
@@ -10,9 +10,9 @@ namespace Mycobot.csharp
         public string name = "mycobot";
         private static SerialPort _serialPort;
 
-        public MyCobot(string port, int baud=115200)
+        public MyCobot(string port, int baud = 115200)
         {
-            _serialPort = new SerialPort(port, baud){DtrEnable = true, RtsEnable = true};
+            _serialPort = new SerialPort(port, baud) { DtrEnable = true, RtsEnable = true };
         }
 
         public bool IsOpen => _serialPort != null && _serialPort.IsOpen;
@@ -21,11 +21,11 @@ namespace Mycobot.csharp
         {
             try
             {
-                 if (_serialPort == null)
+                if (_serialPort == null)
                     return this.IsOpen;
-                 if (_serialPort.IsOpen)
-                     this.Close();
-                 _serialPort.Open();
+                if (_serialPort.IsOpen)
+                    this.Close();
+                _serialPort.Open();
             }
             catch (Exception e)
             {
@@ -69,8 +69,8 @@ namespace Mycobot.csharp
         private static byte[] Int16ToBytes(int v)
         {
             var res = new byte[2];
-            res[0] = (byte) ((v >> 8) & 0xff);
-            res[1] = (byte) ((v) & 0xff);
+            res[0] = (byte)((v >> 8) & 0xff);
+            res[1] = (byte)((v) & 0xff);
             return res;
         }
 
@@ -104,17 +104,17 @@ namespace Mycobot.csharp
         /// </summary>
         public void PowerOn()
         {
-            byte[] command = {0xfe, 0xfe, 0x02, 0x10, 0xfa};
-            Write(command,0,5);
+            byte[] command = { 0xfe, 0xfe, 0x02, 0x10, 0xfa };
+            Write(command, 0, 5);
         }
-        
+
         /// <summary>
         /// arm power off
         /// </summary>
         public void PowerOff()
         {
-            byte[] command = {0xfe, 0xfe, 0x02, 0x11, 0xfa};
-            Write(command,0,5);
+            byte[] command = { 0xfe, 0xfe, 0x02, 0x11, 0xfa };
+            Write(command, 0, 5);
         }
 
         /// <summary>
@@ -133,13 +133,12 @@ namespace Mycobot.csharp
             command[idx++] = 0x06;
             command[idx++] = 0x21;
             // process data
-            command[idx++] = (byte)(jointNo - 1);
+            command[idx++] = (byte)(jointNo);
             command[idx++] = (byte)((_angle >> 8) & 0xff);
             command[idx++] = (byte)(_angle & 0xff);
             command[idx++] = (byte)speed;
             // set footer
             command[idx++] = 0xfa;
-            
             Write(command, 0, command.Length);
         }
 
@@ -177,13 +176,13 @@ namespace Mycobot.csharp
         /// <returns>int[], length: 6</returns>
         public int[] GetAngles()
         {
-            byte[] command = {0xfe, 0xfe, 0x02, 0x20, 0xfa};
+            byte[] command = { 0xfe, 0xfe, 0x02, 0x20, 0xfa };
             Write(command, 0, command.Length);
-            
+
             Thread.Sleep(200);
             // read data
             // Console.WriteLine(_serialPort.BytesToRead);
-            
+
             var m_recvBytes = new byte[_serialPort.BytesToRead];
             var result = _serialPort.Read(m_recvBytes, 0, m_recvBytes.Length);
             if (result <= 0)
@@ -195,14 +194,14 @@ namespace Mycobot.csharp
                 return Array.Empty<int>();
 
             // process data
-            var len = (int)m_recvBytes[idx] - 1; 
+            var len = (int)m_recvBytes[idx] - 1;
             var res = new int[6];
             var resIdx = 0;
             for (var i = idx + 1; i < idx + len; i += 2)
             {
                 res[resIdx++] = BitConverter.ToInt16(m_recvBytes, i) / 100;
             }
-            
+
             return res;
         }
 
@@ -214,7 +213,7 @@ namespace Mycobot.csharp
         /// <param name="speed">speed: 0 ~ 100</param>
         public void SendOneCoord(int coord, int value, int speed)
         {
-            int idx = 0, _value = coord < 4 ? coord * 10 : coord * 100 ;
+            int idx = 0, _value = coord < 4 ? coord * 10 : coord * 100;
             var command = new byte[9];
             // set header
             command[idx++] = 0xfe;
@@ -222,13 +221,13 @@ namespace Mycobot.csharp
             command[idx++] = 0x06;
             command[idx++] = 0x24;
             // process data
-            command[idx++] = (byte)(coord - 1);
+            command[idx++] = (byte)(coord);
             command[idx++] = (byte)((_value >> 8) & 0xff);
             command[idx++] = (byte)(_value & 0xff);
             command[idx++] = (byte)speed;
             // set footer
             command[idx++] = 0xfa;
-            
+
             Write(command, 0, command.Length);
 
         }
@@ -268,9 +267,9 @@ namespace Mycobot.csharp
             command[idx++] = (byte)mode;
             // set footer
             command[idx++] = 0xfa;
-            
+
             Write(command, 0, command.Length);
-            
+
         }
 
         /// <summary>
@@ -279,9 +278,9 @@ namespace Mycobot.csharp
         /// <returns>int[], length: 6</returns>
         public int[] GetCoords()
         {
-            byte[] command = {0xfe, 0xfe, 0x02, 0x23, 0xfa};
-            Write(command, 0 ,command.Length);
-            
+            byte[] command = { 0xfe, 0xfe, 0x02, 0x23, 0xfa };
+            Write(command, 0, command.Length);
+
             Thread.Sleep(200);
             // read data
             var m_recvBytes = new byte[_serialPort.BytesToRead];
@@ -295,7 +294,7 @@ namespace Mycobot.csharp
                 return Array.Empty<int>();
 
             // process data
-            var len = (int)m_recvBytes[idx] - 1; 
+            var len = (int)m_recvBytes[idx] - 1;
             var res = new int[6];
             var resIdx = 0;
             for (var i = idx + 1; i < idx + len; i += 2)
@@ -304,8 +303,126 @@ namespace Mycobot.csharp
                 res[resIdx] = resIdx < 3 ? v / 10 : v / 100;
                 resIdx++;
             }
-            
+
             return res;
+        }
+
+        /*
+         * set m5 io output 
+         * pin_number:io number(2 5 26)
+         * signal: High and low level
+         */
+        public void SetBasicOut(byte pin_number, byte signal)
+        {
+            byte[] command = {0xfe, 0xfe, 0x04, 0xa0, pin_number, signal, 0xfa};
+            Write(command, 0, command.Length);
+        }
+
+        /*
+         * get basic io input 
+         * pin_number:io number(35 36)
+         */
+        public int GetBasicIn(byte pin_number)
+        { 
+            byte[] command = {0xfe, 0xfe, 0x03, 0xa1, pin_number, 0xfa};
+            Write(command, 0, command.Length);
+            Thread.Sleep(200);
+
+            // read data
+            var m_recvBytes = new byte[_serialPort.BytesToRead];
+            var result = _serialPort.Read(m_recvBytes, 0, m_recvBytes.Length);
+            if (result <= 0)
+                return -1;
+
+            // get valid index
+            var idx = getValidIndex(m_recvBytes);
+            if (idx == -1)
+                return -1;
+            var len = (int)m_recvBytes[idx] - 1;
+            int signal = m_recvBytes[idx + len];
+            return signal;
+        }
+
+        /*
+         * set m5 io output 
+         * pin_number:io number(23 33)
+         * signal: High and low level
+         */
+        public void SetDigitalOut(byte pin_number, byte signal)
+        {
+            byte[] command = {0xfe, 0xfe, 0x04, 0x61, pin_number, signal, 0xfa};
+            Write(command, 0, command.Length);
+        }
+
+        /*
+         * get m5 io input 
+         * pin_number:io number(22 19)
+         */
+        public int GetDigitalIn(byte pin_number)
+        { 
+            byte[] command = {0xfe, 0xfe, 0x03, 0x62, pin_number, 0xfa};
+            Write(command, 0, command.Length);
+            Thread.Sleep(200);
+
+            // read data
+            var m_recvBytes = new byte[_serialPort.BytesToRead];
+            var result = _serialPort.Read(m_recvBytes, 0, m_recvBytes.Length);
+            if (result <= 0)
+                return -1;
+
+            // get valid index
+            var idx = getValidIndex(m_recvBytes);
+
+            if (idx == -1)
+                return -1;
+            var len = (int)m_recvBytes[idx] - 1;
+            int signal = m_recvBytes[idx + len];
+
+            return signal;
+        }
+
+        public void setGripperValue(byte angle, byte speed)
+        {
+            byte[] command = { 0xfe, 0xfe, 0x04, 0x67, angle, speed, 0xfa };
+            Write(command, 0, command.Length);
+        }
+
+        public int getGripperValue()
+        {
+            byte[] command = { 0xfe, 0xfe, 0x02, 0x65, 0xfa };
+            Write(command, 0, command.Length);
+            Thread.Sleep(200);
+
+            // read data
+            var m_recvBytes = new byte[_serialPort.BytesToRead];
+            var result = _serialPort.Read(m_recvBytes, 0, m_recvBytes.Length);
+            if (result <= 0)
+                return -1;
+
+            // get valid index
+            var idx = getValidIndex(m_recvBytes);
+            if (idx == -1)
+                return -1;
+            var len = (int)m_recvBytes[idx] - 1;
+            int state = m_recvBytes[idx + len];
+           
+            return state;
+            
+        }
+
+        public void setEletricGripper(int state)
+        {
+            if (state == 0)
+            {
+                byte[] command = { 0x01, 0x06, 0x01, 0x03, 0x03, 0xE8, 0x78, 0x88};
+                Write(command, 0, command.Length);
+            } 
+            else if (state == 1)
+            {
+                byte[] command = { 0x01, 0x06, 0x01, 0x03, 0x00, 0x00, 0x78, 0x88};
+                Write(command, 0, command.Length);
+            }
+
         }
     }
 }
