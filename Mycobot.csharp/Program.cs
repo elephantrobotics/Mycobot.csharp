@@ -13,10 +13,10 @@ namespace Mycobot.csharp
             // int[] angles = new[] {100, 100, 100, 100, 100, 100};
             // mc.SendAngles(angles, 50);
             var recv = mc.GetAngles();
-             foreach (var v in recv)
-             {
-                Console.WriteLine(v);
-             }
+            foreach (var v in recv)
+            {
+               Console.WriteLine(v);
+            }
 
             // int[] coords = new[] {160, 160, 160, 0, 0, 0};
             // mc.SendCoords(coords, 90, 1);
