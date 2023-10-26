@@ -69,7 +69,6 @@ namespace Mycobot.csharp
 
             //get gripper state 0--close 1--open
             /*Console.WriteLine(mc.getGripperValue());*/
-            mc.Close();
         }
     }
 }
