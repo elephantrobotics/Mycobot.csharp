@@ -7,17 +7,32 @@ namespace Mycobot.csharp
     {
         static void Main(string[] args)
         {
-            MyCobot mc = new MyCobot("COM57");//树莓派机械臂串口名称：/dev/ttyAMA0
+            MyCobot mc = new MyCobot("COM14");//树莓派机械臂串口名称：/dev/ttyAMA0
             mc.Open();
             Thread.Sleep(5000);//windows打开串口后，需要等待5s，Windows打开串口底部basic会重启
             // int[] angles = new[] {100, 100, 100, 100, 100, 100};
             // mc.SendAngles(angles, 50);
-            var recv = mc.GetAngles();
-            foreach (var v in recv)
-            {
-               Console.WriteLine(v);
-            }
+            double[] a = { 0, 0, 90, 0, 0, 0 };
+            mc.SendAngles(a, 70);
 
+                Thread.Sleep(1000);
+                float[] cdd = mc.GetAngles();
+                foreach (var v in cdd)
+                {
+                    Console.WriteLine(v);
+                }
+            mc.SendOneCoord(1, -60, 70);
+            Thread.Sleep(1000);
+            mc.SendOneCoord(1, 20, 70);
+            /*
+                        mc.SendOneCoord(1,20, 70);
+                        Thread.Sleep(1000);
+                        var recv = mc.GetAngles();
+                        foreach (var v in recv)
+                        {
+                           Console.WriteLine(v);
+                        }
+            */
             // int[] coords = new[] {160, 160, 160, 0, 0, 0};
             // mc.SendCoords(coords, 90, 1);
             // Thread.Sleep(5000);
@@ -26,9 +41,13 @@ namespace Mycobot.csharp
             // {
             // Console.WriteLine(v);
             // }
+            /*           float[] b = { 0,0,0,0,0,0 };
+                       mc.SendAngles(b, 70);
+                       Thread.Sleep(1000);
+                       mc.SendOneAngle(3, 90, 70);
+                       Thread.Sleep(1000);
+            */
 
-            mc.SendOneAngle(1,0, 70);
-            Thread.Sleep(100);
             /*var angle = new int[6];
             angle = mc.GetAngles();
             foreach (var v in angle)

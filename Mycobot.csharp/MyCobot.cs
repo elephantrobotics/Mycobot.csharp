@@ -123,9 +123,10 @@ namespace Mycobot.csharp
         /// <param name="jointNo">joint number: 1 ~ 6</param>
         /// <param name="angle">angle value: -180 ~ 180 </param>
         /// <param name="speed">speed value: 0 ~ 100</param>
-        public void SendOneAngle(int jointNo, int angle, int speed)
+        public void SendOneAngle(int jointNo, double angle, int speed)
         {
-            int _angle = angle * 100, idx = 0;
+            int _angle = (int)angle * 100;
+            int idx = 0;
             var command = new byte[9];
             // set header
             command[idx++] = 0xfe;
@@ -147,10 +148,11 @@ namespace Mycobot.csharp
         /// </summary>
         /// <param name="angles">angles[], length: 6</param>
         /// <param name="speed">speed value: 0 ~ 100</param>
-        public void SendAngles(int[] angles, int speed)
+        public void SendAngles(double[] angles, int speed)
         {
             var command = new byte[18];
             var idx = 0;
+            int[] angles1 = {0,0,0,0,0,0};
             command[idx++] = 0xfe;
             command[idx++] = 0xfe;
             command[idx++] = 0x0f;
@@ -158,8 +160,10 @@ namespace Mycobot.csharp
             for (var j = 0; j < angles.Length; ++j)
             {
                 angles[j] *= 100;
+                angles1[j] = (int)(angles[j]);
+                //angles1[j] = (int)(angles[j]*100);
             }
-            var a = Int16ArrToBytes(angles);
+            var a = Int16ArrToBytes(angles1);
             foreach (var t in a)
             {
                 command[idx++] = t;
@@ -174,7 +178,7 @@ namespace Mycobot.csharp
         /// Get all angles
         /// </summary>
         /// <returns>int[], length: 6</returns>
-        public int[] GetAngles()
+        public float[] GetAngles()
         {
             byte[] command = { 0xfe, 0xfe, 0x02, 0x20, 0xfa };
             Write(command, 0, command.Length);
@@ -186,16 +190,16 @@ namespace Mycobot.csharp
             var m_recvBytes = new byte[_serialPort.BytesToRead];
             var result = _serialPort.Read(m_recvBytes, 0, m_recvBytes.Length);
             if (result <= 0)
-                return Array.Empty<int>();
+                return Array.Empty<float>();
 
             // get valid index
             var idx = getValidIndex(m_recvBytes);
             if (idx == -1)
-                return Array.Empty<int>();
+                return Array.Empty<float>();
 
             // process data
-            var len = (int)m_recvBytes[idx] - 1;
-            var res = new int[6];
+            var len = (float)m_recvBytes[idx] - 1;
+            var res = new float[6];
             var resIdx = 0;
             for (var i = idx + 1; i < idx + len; i += 2)
             {
@@ -211,9 +215,11 @@ namespace Mycobot.csharp
         /// <param name="coord">coord No: 1 - 6</param>
         /// <param name="value">coord value</param>
         /// <param name="speed">speed: 0 ~ 100</param>
-        public void SendOneCoord(int coord, int value, int speed)
+        public void SendOneCoord(double coord, int value, int speed)
         {
-            int idx = 0, _value = coord < 4 ? coord * 10 : coord * 100;
+            int idx = 0 ;
+            int _value = (int)(coord < 4 ? value * 10 : value * 100);
+
             var command = new byte[9];
             // set header
             command[idx++] = 0xfe;
@@ -238,10 +244,11 @@ namespace Mycobot.csharp
         /// <param name="coords">int[], length: 6</param>
         /// <param name="speed">speed: int, value: 0 ~ 100</param>
         /// <param name="mode">mode:  0 - angular, 1 - linear</param>
-        public void SendCoords(int[] coords, int speed, int mode)
+        public void SendCoords(double[] coords, int speed, int mode)
         {
             var command = new byte[19];
             var idx = 0;
+            int[] coords1= {0,0,0,0,0,0};
             // set header
             command[idx++] = 0xfe;
             command[idx++] = 0xfe;
@@ -251,13 +258,15 @@ namespace Mycobot.csharp
             for (var i = 0; i < 3; ++i)
             {
                 coords[i] *= 10;
+                coords1[i] = (int)coords[i];
             }
             for (var i = 3; i < 6; ++i)
             {
                 coords[i] *= 100;
+                coords1[i] = (int)coords[i];
             }
             // append to command
-            var a = Int16ArrToBytes(coords);
+            var a = Int16ArrToBytes(coords1);
             foreach (var t in a)
             {
                 command[idx++] = t;
