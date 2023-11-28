@@ -7,23 +7,67 @@ namespace Mycobot.csharp
     {
         static void Main(string[] args)
         {
-            MyCobot mc = new MyCobot("COM14");//树莓派机械臂串口名称：/dev/ttyAMA0
+            MyCobot mc = new MyCobot("COM20");//树莓派机械臂串口名称：/dev/ttyAMA0
             mc.Open();
             Thread.Sleep(5000);//windows打开串口后，需要等待5s，Windows打开串口底部basic会重启
             // int[] angles = new[] {100, 100, 100, 100, 100, 100};
             // mc.SendAngles(angles, 50);
-            double[] a = { 0, 0, 90, 0, 0, 0 };
-            mc.SendAngles(a, 70);
+            double[] b = { 131, 153, 228, -19 };
+            double[] a = { 0, 0, 0, 0};
+            mc.SendAngles(a , 70);
 
-                Thread.Sleep(1000);
-                float[] cdd = mc.GetAngles();
-                foreach (var v in cdd)
-                {
-                    Console.WriteLine(v);
-                }
-            mc.SendOneCoord(1, -60, 70);
-            Thread.Sleep(1000);
-            mc.SendOneCoord(1, 20, 70);
+            Thread.Sleep(5000);
+            int[] cdd = mc.GetCoords();
+            foreach (var v in cdd)
+            {
+                Console.WriteLine(v);
+            }
+            Thread.Sleep(2000);
+
+            mc.SendOneCoord(1, 200, 70);
+            Thread.Sleep(5000);
+            int[] ddd = mc.GetCoords();
+            foreach (var v in ddd)
+            {
+                Console.WriteLine(v);
+            }
+            Thread.Sleep(2000);
+
+            mc.SendOneCoord(2, 100, 70);
+            Thread.Sleep(5000);
+            int[] edd = mc.GetCoords();
+            foreach (var v in edd)
+            {
+                Console.WriteLine(v);
+            }
+            Thread.Sleep(2000);
+
+            mc.SendOneCoord(3, 100, 70);
+            Thread.Sleep(5000);
+            int[] wdd = mc.GetCoords();
+            foreach (var v in wdd)
+            {
+                Console.WriteLine(v);
+            }
+            Thread.Sleep(2000);
+
+            mc.SendCoords(b, 70,1);
+            Thread.Sleep(5000);
+            int[] fdd = mc.GetCoords();
+            foreach (var v in fdd)
+            {
+                Console.WriteLine(v);
+            }
+
+
+
+            //mc.IsInPosition({}, 1);
+
+            /*int[] bdd = mc.GetCoords();
+            foreach (var v in bdd)
+            {
+                Console.WriteLine(v);
+            }*/
             /*
                         mc.SendOneCoord(1,20, 70);
                         Thread.Sleep(1000);
