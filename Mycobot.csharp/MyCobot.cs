@@ -395,6 +395,11 @@ namespace Mycobot.csharp
             return signal;
         }
 
+        public void SetGripperMode(byte mode)
+        {
+            byte[] command = { 0xfe, 0xfe, 0x03, 0x6D, mode, 0xfa };
+            Write(command, 0, command.Length);
+        }
         public void setGripperValue(byte angle, byte speed)
         {
             byte[] command = { 0xfe, 0xfe, 0x04, 0x67, angle, speed, 0xfa };
@@ -422,6 +427,11 @@ namespace Mycobot.csharp
 
             return state;
 
+        }
+        public void setGripperState(byte angle, byte speed)
+        {
+            byte[] command = { 0xfe, 0xfe, 0x04, 0x66, angle, speed, 0xfa };
+            Write(command, 0, command.Length);
         }
 
         public void setEletricGripper(int state)
@@ -797,7 +807,11 @@ namespace Mycobot.csharp
 
             return signal;
         }
-
+        public void SetGripperMode(byte mode)
+        {
+            byte[] command = { 0xfe, 0xfe, 0x03, 0x6D, mode, 0xfa };
+            Write(command, 0, command.Length);
+        }
         public void setGripperValue(byte angle, byte speed)
         {
             byte[] command = { 0xfe, 0xfe, 0x04, 0x67, angle, speed, 0xfa };
