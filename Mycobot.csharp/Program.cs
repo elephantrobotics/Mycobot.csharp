@@ -7,38 +7,27 @@ namespace Mycobot.csharp
     {
         static void Main(string[] args)
         {
-            MyCobot mc = new MyCobot("COM18");//树莓派机械臂串口名称：/dev/ttyAMA0
+            MyCobot mc = new MyCobot("COM7");//树莓派机械臂串口名称：/dev/ttyAMA0
             mc.Open();
             Thread.Sleep(5000);//windows打开串口后，需要等待5s，Windows打开串口底部basic会重启
-            // int[] angles = new[] {100, 100, 100, 100, 100, 100};
-            // mc.SendAngles(angles, 50);
-            //double[] b = { 131, 153, 228, -19 };
-            //double[] a = { 0, 0, 0, 0};
-            Thread.Sleep(20000);
-            mc.SetGripperMode(1);
-            Thread.Sleep(1000);     
+                               // int[] angles = new[] {100, 100, 100, 100, 100, 100};
+                               // mc.SendAngles(angles, 50);
+                               double[] b = { 131, 153, 228, -19 ,0,0};
+                               double[] a = { 0, 0, 0, 0,0,0};
+            //mc.setPumpStates(1);
+            //Thread.Sleep(5000);
+            //mc.setPumpStates(0);
+            //Thread.Sleep(5000);
 
-            mc.SetDigitalOut(23, 0);
-            Thread.Sleep(50);
-            mc.SetDigitalOut(33, 1);
-            Thread.Sleep(3000);
-            mc.SetDigitalOut(23, 1);
-            Thread.Sleep(50);
-            mc.SetDigitalOut(33, 0);
-            Thread.Sleep(3000);
 
-            /*            Thread.Sleep(5000);
-                        int[] cdd = mc.GetCoords();
-                        foreach (var v in cdd)
-                        {
-                            Console.WriteLine(v);
-                        }
-                        Thread.Sleep(2000);
+     
+
+
 
                         mc.SendOneCoord(1, 200, 70);
                         Thread.Sleep(5000);
                         int[] ddd = mc.GetCoords();
-                        foreach (var v in ddd)
+                        foreach (var v in ddd)      //打印
                         {
                             Console.WriteLine(v);
                         }
@@ -53,14 +42,6 @@ namespace Mycobot.csharp
                         }
                         Thread.Sleep(2000);
 
-                        mc.SendOneCoord(3, 100, 70);
-                        Thread.Sleep(5000);
-                        int[] wdd = mc.GetCoords();
-                        foreach (var v in wdd)
-                        {
-                            Console.WriteLine(v);
-                        }
-                        Thread.Sleep(2000);
 
                         mc.SendCoords(b, 70,1);
                         Thread.Sleep(5000);
@@ -69,8 +50,6 @@ namespace Mycobot.csharp
                         {
                             Console.WriteLine(v);
                         }
-                        mc.SendOneAngle(1, 100, 70);*/
-
 
             //mc.IsInPosition({}, 1);
 

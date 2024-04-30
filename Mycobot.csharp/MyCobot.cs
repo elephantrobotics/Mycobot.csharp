@@ -103,11 +103,15 @@ namespace Mycobot.csharp
             return -1;
         }
 #if (myPalletizer260)
+        public void Stop()
+        {
+            byte[] command = { 0xfe, 0xfe, 0x02, 0x29, 0xfa };
+            Write(command, 0, 5);
+        }
         /// <summary>
         /// arm power on
         /// </summary>
-        public void
-            PowerOn()
+        public void PowerOn()
         {
             byte[] command = { 0xfe, 0xfe, 0x02, 0x10, 0xfa };
             Write(command, 0, 5);
@@ -253,7 +257,7 @@ namespace Mycobot.csharp
         {
             var command = new byte[19];
             var idx = 0;
-            int[] coords1 = { 0, 0, 0, 0,0,0 };
+            int[] coords1 = { 0, 0, 0, 0 };
             // set header
             command[idx++] = 0xfe;
             command[idx++] = 0xfe;
@@ -516,12 +520,16 @@ namespace Mycobot.csharp
             }
         }
 #else
-    /// <summary>
-    /// arm power on
-    /// </summary>
-    public void  
-            PowerOn()
+        public void Stop()
         {
+             byte[] command = { 0xfe, 0xfe, 0x02, 0x29, 0xfa };
+             Write(command, 0, 5);
+        }
+        /// <summary>
+        /// arm power on
+        /// </summary>
+            public void PowerOn()
+            {
             byte[] command = { 0xfe, 0xfe, 0x02, 0x10, 0xfa };
             Write(command, 0, 5);
         }
@@ -922,6 +930,24 @@ namespace Mycobot.csharp
             }
 
         }
+        public void setPumpStates(int state)
+        {
+            if (state == 0)         //off
+            {
+                SetBasicOut(5, 1);
+                Thread.Sleep(1);
+                SetBasicOut(2, 0);
+                Thread.Sleep(1);
+                SetBasicOut(2, 1);
+                Thread.Sleep(1);
+            } 
+            else if (state == 1)    //on
+            {
+                SetBasicOut(5, 0);
+            }
+
+        }
+
 #endif
     }
 }
