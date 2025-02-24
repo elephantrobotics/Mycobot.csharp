@@ -12,7 +12,7 @@ namespace Mycobot.csharp
 
         public MyCobot(string port, int baud = 115200)
         {
-            _serialPort = new SerialPort(port, baud) { DtrEnable = true, RtsEnable = true };
+            _serialPort = new SerialPort(port, baud) { DtrEnable = false, RtsEnable = false };
         }
 
         public bool IsOpen => _serialPort != null && _serialPort.IsOpen;
