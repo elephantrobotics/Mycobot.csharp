@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO.Ports;
 using System.Threading;
 
@@ -432,6 +433,20 @@ namespace Mycobot.csharp
                 Write(command, 0, command.Length);
             }
 
+        }
+
+        public void setFreshMode(int mode)
+        {
+            if (mode == 0)
+            {
+                byte[] command = { 0xfe, 0xfe, 0x03, 0x16, 0x00, 0xfa };
+                Write(command, 0, command.Length);
+            }
+            else if (mode == 1)
+            {
+                byte[] command = { 0xfe, 0xfe, 0x03, 0x16, 0x01, 0xfa };
+                Write(command, 0, command.Length);
+            }
         }
     }
 }
